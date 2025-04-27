@@ -16,12 +16,6 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh '''
-                    # Ensure python3-venv is installed
-                    if ! dpkg -l | grep -q python3-venv; then
-                        sudo apt-get update
-                        sudo apt-get install -y python3-venv
-                    fi
-                    # Create a virtual environment and install dependencies
                     python3 -m venv venv
                     . venv/bin/activate
                     pip install --upgrade pip
@@ -41,7 +35,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarQb') {
                     script {
-                        def scannerHome = tool 'SonarQb'
+                        def scannerHome = tool 'sonar-scanner'
                         sh """
                             ${scannerHome}/bin/sonar-scanner \
                                 -Dsonar.projectKey=py-application \
