@@ -5,6 +5,7 @@ pipeline {
         DOCKER_IMAGE = "${DOCKERHUB_USERNAME}/py-application"
         DOCKERHUB_TOKEN = credentials('docker-hub-credential')
         SONARQUBE_TOKEN = credentials('SonarQb')
+        SONARQUBE_URL = 'http://34.239.141.95:9000'
     }
     stages {
         stage('Checkout') {
@@ -15,6 +16,12 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh '''
+                    # Ensure python3-venv is installed
+                    if ! dpkg -l | grep -q python3-venv; then
+                        sudo apt-get update
+                        sudo apt-get install -y python3-venv
+                    fi
+                    # Create a virtual environment and install dependencies
                     python3 -m venv venv
                     . venv/bin/activate
                     pip install --upgrade pip
@@ -30,22 +37,22 @@ pipeline {
                 '''
             }
         }
-       stage('SonarQube Analysis') {
-    steps {
-        withSonarQubeEnv('sonarqube') {
-            script {
-                def scannerHome = tool 'sonarqube'
-                sh """
-                    ${scannerHome}/bin/sonar-scanner \
-                        -Dsonar.projectKey=py-application \
-                        -Dsonar.sources=. \
-                        -Dsonar.host.url=http://54.225.124.9:9000 \
-                        -Dsonar.login=$SONARQUBE_TOKEN
-                """
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonarqube') {
+                    script {
+                        def scannerHome = tool 'sonarqube'
+                        sh """
+                            ${scannerHome}/bin/sonar-scanner \
+                                -Dsonar.projectKey=py-application \
+                                -Dsonar.sources=. \
+                                -Dsonar.host.url=$SONARQUBE_URL \
+                                -Dsonar.login=$SONARQUBE_TOKEN
+                        """
+                    }
+                }
             }
         }
-    }
-}
         stage('Build and Push Docker Image') {
             when {
                 branch 'main'
