@@ -39,9 +39,9 @@ pipeline {
         }
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sonarqube') {
+                withSonarQubeEnv('SonarQb') {
                     script {
-                        def scannerHome = tool 'sonarqube'
+                        def scannerHome = tool 'SonarQb'
                         sh """
                             ${scannerHome}/bin/sonar-scanner \
                                 -Dsonar.projectKey=py-application \
