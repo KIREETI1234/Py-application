@@ -1,10 +1,10 @@
 pipeline {
     agent any
     environment {
-        DOCKERHUB_USERNAME = 'gowri5877'
-        DOCKER_IMAGE = "${DOCKERHUB_USERNAME}/pythonimg"
+        DOCKERHUB_USERNAME = 'akashchandran'
+        DOCKER_IMAGE = "${DOCKERHUB_USERNAME}/py-application"
         DOCKERHUB_TOKEN = credentials('docker-hub-credential')
-        SONARQUBE_TOKEN = credentials('sonarqube-credential')
+        SONARQUBE_TOKEN = credentials('SonarQb')
     }
     stages {
         stage('Checkout') {
@@ -37,7 +37,7 @@ pipeline {
                 def scannerHome = tool 'sonarqube'
                 sh """
                     ${scannerHome}/bin/sonar-scanner \
-                        -Dsonar.projectKey=k8shelloworld \
+                        -Dsonar.projectKey=py-application \
                         -Dsonar.sources=. \
                         -Dsonar.host.url=http://54.225.124.9:9000 \
                         -Dsonar.login=$SONARQUBE_TOKEN
