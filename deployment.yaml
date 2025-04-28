@@ -15,5 +15,5 @@ spec:
       containers:
       - name: python-app
         image:kireeti1234/py-image
-        ports:
+        Ports:
         - containerPort: 5000
