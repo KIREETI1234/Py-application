@@ -50,9 +50,6 @@ pipeline {
         //     }
         // }
         stage('Build and Push Docker Image') {
-            when {
-                branch 'main'
-            }
             steps {
                 sh """
                     echo ${DOCKERHUB_TOKEN} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin
@@ -62,9 +59,6 @@ pipeline {
             }
         }
         stage('Deploy to Kubernetes') {
-            when {
-                branch 'main'
-            }
             steps {
                 sh 'kubectl apply -f deployment.yaml'
                 sh 'kubectl apply -f service.yaml'
