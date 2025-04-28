@@ -1,11 +1,11 @@
 pipeline {
     agent any
     environment {
-        DOCKERHUB_USERNAME = 'akashchandran'
+        DOCKERHUB_USERNAME = 'kireeti1234'
         DOCKER_IMAGE = "${DOCKERHUB_USERNAME}/py-application"
-        DOCKERHUB_TOKEN = credentials('docker-hub-credential')
-        SONARQUBE_TOKEN = credentials('SonarQb')
-        SONARQUBE_URL = 'http://34.239.141.95:9000'
+        DOCKERHUB_TOKEN = credentials('docker-hub-credentials')
+        // SONARQUBE_TOKEN = credentials('SonarQb')
+        // SONARQUBE_URL = 'http://34.239.141.95:9000'
     }
     stages {
         stage('Checkout') {
@@ -31,22 +31,22 @@ pipeline {
                 '''
             }
         }
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQb') {
-                    script {
-                        def scannerHome = tool 'sonar-scanner'
-                        sh """
-                            ${scannerHome}/bin/sonar-scanner \
-                                -Dsonar.projectKey=py-application \
-                                -Dsonar.sources=. \
-                                -Dsonar.host.url=$SONARQUBE_URL \
-                                -Dsonar.login=$SONARQUBE_TOKEN
-                        """
-                    }
-                }
-            }
-        }
+        // stage('SonarQube Analysis') {
+        //     steps {
+        //         withSonarQubeEnv('SonarQb') {
+        //             script {
+        //                 def scannerHome = tool 'sonar-scanner'
+        //                 sh """
+        //                     ${scannerHome}/bin/sonar-scanner \
+        //                         -Dsonar.projectKey=py-application \
+        //                         -Dsonar.sources=. \
+        //                         -Dsonar.host.url=$SONARQUBE_URL \
+        //                         -Dsonar.login=$SONARQUBE_TOKEN
+        //                 """
+        //             }
+        //         }
+        //     }
+        // }
         stage('Build and Push Docker Image') {
             when {
                 branch 'main'
