@@ -17,7 +17,7 @@ pipeline {
             steps {
                 sh '''
                     sudo apt update -y
-                    sudo apt install python3-venv
+                    sudo apt install -y python3.12-venv
                     python3 -m venv venv
                     . venv/bin/activate
                     pip install --upgrade pip
