@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKERHUB_USERNAME = 'kireeti1234'
-        DOCKER_IMAGE = "${DOCKERHUB_USERNAME}/py-application"
+        DOCKER_IMAGE = "${DOCKERHUB_USERNAME}/py-image"
         DOCKERHUB_TOKEN = credentials('docker-hub-credentials')
         // SONARQUBE_TOKEN = credentials('SonarQb')
         // SONARQUBE_URL = 'http://34.239.141.95:9000'
