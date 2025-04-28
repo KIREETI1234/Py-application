@@ -51,11 +51,17 @@ pipeline {
         // }
         stage('Build and Push Docker Image') {
             steps {
-                sh """
-                    echo ${DOCKERHUB_TOKEN} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin
+                // sh """
+                //     echo ${DOCKERHUB_TOKEN} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin
+                //     docker build -t ${DOCKER_IMAGE} .
+                //     docker push ${DOCKER_IMAGE}
+                // """
+                 withDockerRegistry([credentialsId: 'docker-hub-credentials', url: 'https://index.docker.io/v1/']) {
+                 sh """
                     docker build -t ${DOCKER_IMAGE} .
                     docker push ${DOCKER_IMAGE}
                 """
+                }
             }
         }
         stage('Deploy to Kubernetes') {
